@@ -1,6 +1,7 @@
 import express from 'express';
 import database from './config/db.js';
 import dotenv from 'dotenv';
+import productRoute from './routes/product.route.js'
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 await database();
+
+app.use('/product',productRoute)
 
 // Start the server
 app.listen(port, () => {
