@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      increment: true,
     },
     customerName: {
       type: String,

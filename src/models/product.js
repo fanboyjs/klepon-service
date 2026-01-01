@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema(
   {
+    index:{
+      type: String,
+      required: true,
+      increment:true,
+    },
     name: {
       type: String,
       required: true,
