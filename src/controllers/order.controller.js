@@ -1,12 +1,11 @@
 import Order from '../models/order.js'
-import orderItem from '../models/order_item.js'
+import order_item from '../models/order_item.js'
 import product from '../models/product.js'
 
 export const createOrder = async (req,res)=>{
     try {
-        const {orderNumber, customerName, customerPhone, pickupDate,totalPrice, status, products} = req.body
+        const {customerName, customerPhone, pickupDate, totalPrice, status, products} = req.body
         const data = {
-            orderNumber,
             customerName,
             customerPhone,
             pickupDate,
@@ -14,13 +13,24 @@ export const createOrder = async (req,res)=>{
             status
         }
 
-        // const order = await Order.create(data)
+        const order = await Order.create(data)
 
-        products.forEach(product => {
-            console.log(product)
-        });
-        // const orderItem = await orderItem.create(products)
-        res.status(200).json({msg:"Order created success"})
+        // Loop dan buat order items
+        const orderItems = []
+        for (const product of products) {
+            const itemData = {
+                orderId: order._id,
+                productId: product.id,
+                productName: product.name,
+                price: product.price,
+                quantity: product.qty,
+                subtotal: product.price * product.qty
+            }
+            const orderItem = await order_item.create(itemData)
+            orderItems.push(orderItem)
+        }
+
+        res.status(200).json({msg:"Order created success", order, orderItems})
     } catch (error) {
         res.status(500).json({msg:error.message})
     }
